@@ -135,10 +135,6 @@ h3 {
   margin-top: 50px;
 }
 
-.extracards {
-  visibility: hidden;
-}
-
 /*score boxes*/
 .score {
   font-size: 2em;
@@ -171,6 +167,11 @@ h3 {
   margin: 15px;
 }
 
+#split {
+  background: #666666;
+  color: #999;
+}
+
 /* CARD STYLES & SETUP */
 
 .card {
@@ -179,7 +180,9 @@ h3 {
   border-width: 1px;
   border-style: solid;
   font-size: 20pt;
-  position: absolute;
+  position: relative;
+  display: inline-block;
+  margin-left: -40px;
   width:  3.75em;
   height: 5.00em;
 }
