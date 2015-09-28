@@ -96,44 +96,9 @@ h3 {
 #dcards, #pcards {
   position: absolute;
   margin-left: 350px;
-  margin-top: 20px;
-}
-
-#dealertwo, #playertwo {
-  position: absolute;
-  margin-left: 80px;
-  margin-top: 10px;
-}
-
-#dealerthree, #playerthree {
-  position: absolute;
-  margin-left: 140px;
-  margin-top: 20px;
-}
-
-#dealerfour, #playerfour {
-  position: absolute;
-  margin-left: 190px;
-  margin-top: 30px;
-}
-
-#dealerfive, #playerfive {
-  position: absolute;
-  margin-left: 230px;
-  margin-top: 40px;
-}
-
-#dealersix, #playersix {
-  position: absolute;
-  margin-left: 270px;
   margin-top: 50px;
 }
 
-#dealerseven, #playerseven {
-  position: absolute;
-  margin-left: 310px;
-  margin-top: 50px;
-}
 
 /*score boxes*/
 .score {

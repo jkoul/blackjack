@@ -1,35 +1,82 @@
 //combine cards into deck array
-var balance = 1000;
-var blackjack;
-var playerCards = [];
-var dealerCards = [];
-
+var balance = 0;
+var playerValues = [];
+var dealerValues = [];
+var gamenum = 0;
+$("#betbox").on("click", function() {
+  $(this).css("background","white");
+});
 //instantiate global variables
 
+
 $(document).ready(function () {
+  addBalance();
+  // getBet();
   renewDeck();
-  $("#balamt").html("$" + balance);
-
-  //initialize game
-  $("#deal").on("click",startGame);
-
   setCardValues();
+  $("#deal").on("click", entryCheck);
 });
 
+function entryCheck() {
+  if ($("#betbox").val() == "") {
+    $("#betbox").css("background", "red");
+  } else if (balance == 0 || $("#betbox").val() > balance ) {
+    $("#balamt").css("background", "red");
+    addBalance();
+  } else {
+    startGame();
+  };
+};
 
-function renewDeck(cards) {
+function addBalance() {
+  var newBalance = parseInt(prompt("Enter a Deposit Amount\n(minimum 10, suggested 1000)"));
+  if(newBalance > 10) {
+    balance += newBalance;
+  } else {
+    alert("Deposit not valid\nAdding Default Deposit of 1000");
+    balance += 1000;
+  };
+  $("#balamt").html("$" + balance).css("background","#ccc");
+  if (gamenum > 0) {
+    if (bet <= balance) {
+      $("#deal").on("click",entryCheck);
+    } else {
+      getBet();
+    };
+  };
+}
+
+function getBet() {
+  bet = prompt("Enter Your Bet Amount\n (default 10)");
+  if (bet > 10 && bet <= balance) {
+    alert("Bet saved! You can change your bet amount anytime by clicking on the bet window.")
+  } else {
+    alert("Bet amount not valid\nEntering Default Bet of 10\nYou can change your bet amount anytime by clicking on the bet window.");
+    bet = 10;
+  };
+  $("#betbox").val(bet).off("click");
+}
+
+function renewDeck() {
   //new deck
-  if(cards == undefined) {
+  if(gamenum == 0) {
     stackMakeDeck(6);
   //reset deck
   } else if (cards.length < 40) {
     stackMakeDeck(6);
-  }
+  };
   //add values to cards
   setCardValues();
 
   //shuffle cards
   stackShuffle(2);
+}
+
+function setCardValues() {
+  for(var i=0; i<cards.length;i++) {
+    value = getValue(cards[i].rank);
+    cards[i].value = value;
+  }
 }
 
 //transform card "rank" into blackjack value. "cardrank" is a dummy var.
@@ -46,191 +93,203 @@ function getValue(cardrank) {
   };
 }
 
-function setCardValues() {
-  for(var i=0; i<cards.length;i++) {
-    value = getValue(cards[i].rank);
-    cards[i].value = value;
-  }
-}
-
 function addPlayerCard() {
   var nextCard = stackDeal();
   var node = nextCard.createNode();
   $("#pcards").append(node);
-  playerCards.push(nextCard);
+  playerValues.push(nextCard.value);
   updatePlayerScore();
 }
 
 function updatePlayerScore() {
   playerScore = 0;
-  for (var i=0; i < playerCards.length; i++) {
-    playerScore += playerCards[i].value;
+  for (var i=0; i < playerValues.length; i++) {
+    playerScore += playerValues[i];
+  };
+  if(playerScore > 21 && Math.max.apply(Math,playerValues) == 11) {
+    aceFlexPlayer();
   };
   $("#playerscore").html(playerScore);
+}
+
+function aceFlexPlayer() {
+  for (var i=0; i < playerValues.length; i++) {
+    if (playerValues[i] == 11) {
+      playerValues[i] = 1;
+      break;
+    };
+  };
+  updatePlayerScore();
 }
 
 function addDealerCard() {
   var nextCard = stackDeal();
   var node = nextCard.createNode();
   $("#dcards").append(node);
-  dealerCards.push(nextCard);
+  dealerValues.push(nextCard.value);
   updateDealerScore();
 }
 
 function updateDealerScore() {
   dealerScore = 0;
-  if (dealerCards.length < 2){
+  if (dealerValues.length < 2){
     dealerScore = 0;
-  } else if (dealerCards.length == 2){
-    dealerScore = dealerCards[1].value;
   } else {
-    for (var i=0; i < dealerCards.length; i++) {
-      dealerScore += dealerCards[i].value;
+    for (var i=0; i < dealerValues.length; i++) {
+      dealerScore += dealerValues[i];
+    };
+    if(dealerScore > 21 && Math.max.apply(Math,dealerValues) == 11) {
+      aceFlexDealer();
     };
   };
   $("#dealerscore").html(dealerScore);
 }
 
-
+function aceFlexDealer() {
+  for(var i=0; i<dealerValues.length; i++) {
+    if(dealerValues[i] == 11) {
+      dealerValues[i] = 1;
+      break;
+    };
+  };
+  updateDealerScore();
+}
 
 function startGame(){
-  bet = $("#betbox").val()
+  bet = $("#betbox").val();
   balance -= bet;
   $("#balamt").html("$" + balance);
   $("#deal").off("click");
+  gamenum ++;
 
   //deal cards
   addDealerCard();
   $("#dcards div:first-child.front").hide();
   addPlayerCard();
   addDealerCard();
+  dealerScore = dealerValues[1];
+  $("#dealerscore").html(dealerScore);
   addPlayerCard();
-  if(playerScore == 21) {
-    blackjack = true;
-    getWinner();
+  if (dealerScore == 11) {
+    aceInsurance();
   };
-  // if(playerScore>21) {aceFlexPlayer();}
-
-  //hit functionality
-  $("#hit").on("click", hitPlayer);
-
-  //double down
-  $("#double").on("click", doubleDown);
-
-  //stand functionality
-  $("#stand").on("click", dealerPlay);
-
+  if (playerScore == 21) {
+    blackjack();
+  } else {
+    //hit functionality
+    $("#hit").on("click", hitPlayer);
+    //double down
+    $("#double").on("click", doubleDown);
+    //stand functionality
+    $("#stand").on("click", dealerPlay);
+  }
 }
 
-// function aceFlexPlayer () {
-//   for (var i=7; i < ($(".activepcards").length)+7; i++) {
-//     if(cards[i].value == 11) {
-//       cards[i].value = 1;
-//       break;
-//     };
-//   }; updatePlayerScore();
-// };
-//
-// function aceFlexDealer () {
-//   for (var i=0; i < ($(".activedcards").length); i++) {
-//     if(cards[i].value == 11) {
-//       cards[i].value = 1;
-//       break;
-//     };
-//   }; updateDealerScore();
-// };
+var aceInsurance = function(insurance) {
+  var choice = confirm("Do you want to buy insurance?");
+  if (choice == true) {
+    insurance = bet*0.5;
+    balance -= insurance;
+  } else {
+    insurance = 0;
+  };
+  $("#balamt").html("$" + balance);
+  if (dealerValues[0] == 10) {
+    balance += insurance*3;
+  };
+}
 
-function hitPlayer (){
+
+function blackjack() {
+  if (dealerValues[1] == 11 && dealerValues[0] == 10) {
+    dealerPlay();
+  } else {
+    alert("Blackjack!!! Player Wins!")
+    balance += bet*2.5;
+    $("#balamt").html("$" + balance);
+    resetGame();
+  };
+}
+
+
+function hitPlayer(){
   $("#double").off("click");
-  if(playerScore<21) {
+  if(playerScore < 21) {
     addPlayerCard();
-    if (playerScore==21) {
-      dealerPlay();
-    } else if (playerScore>21) {
-        // aceFlexPlayer();
-        // if(playerScore>21) {
-          getWinner();
-      // }
-    };
+  };
+  if (playerScore > 21) {
+    getWinner();
+  } else if (playerScore == 21) {
+    dealerPlay();
   };
 };
 
-function doubleDown () {
+function doubleDown() {
   balance -= bet;
   bet *= 2
   $("#balamt").html("$" + balance);
   addPlayerCard();
-  // if (playerScore>21) {
-  //   aceFlexPlayer();
-  //   dealerPlay();
-  // } else {
+  if (playerScore > 21) {
+    getWinner();
+  } else {
     dealerPlay();
-  // };
+  };
 }
 
 function dealerPlay() {
- $("#hit").off("click");
- $("#stand").off("click");
- $("#double").off("click");
- $("#dcards div:first-child.front").show();
-  dealerScore = dealerCards[0].value + dealerCards[1].value;
+  $("#hit").off("click");
+  $("#stand").off("click");
+  $("#double").off("click");
+  $("#dcards div:first-child.front").show();
+  updateDealerScore();
   $("#dealerscore").html(dealerScore);
   while(dealerScore<=16){
     addDealerCard();
   };
   getWinner();
 };
-  // if (dealerScore==21) {
-    // break;
-      // } else if (dealerScore>21) {
-      //   // aceFlexDealer();
-      //   if(dealerScore>21) {getWinner();}
-    //   };
-    // } else {getWinner();
-    //   break;
-    // };
 
 
-function getWinner () {
+function getWinner() {
+  $("#hit").off("click");
   $("#stand").off("click");
-  if(playerScore > dealerScore) {
-    if(playerScore <= 21) {
-      if(blackjack == true) {
-        alert("Blackjack!!! Player Wins!")
-        balance += bet*2.5;
-      } else {
-        alert("Player Wins!");
-        balance += bet*2;
-      } $("#balamt").html("$" + balance);
-    } else {
-      alert("Player Bust! Dealer Wins!");
-    };
-  } else if (dealerScore > playerScore) {
-    if (dealerScore <= 21) {
-      alert("Dealer Wins!");
-    } else {
-      alert("Dealer Bust! Player Wins!");
-      balance += bet*2;
-      $("#balamt").html("$" + balance);
-    };
+  $("#double").off("click");
+  if (playerScore > 21) {
+    alert("Player Bust! Dealer Wins!");
+    balance += 0;
   } else if (dealerScore == playerScore) {
     alert("Push!");
     balance += bet*1;
+  } else if (playerScore > dealerScore) {
+    alert("Player Wins!");
+    balance += bet*2;
     $("#balamt").html("$" + balance);
+  } else if (dealerScore <= 21) {
+    alert("Dealer Wins!");
+    balance += 0;
+  } else {
+    alert("Dealer Bust! Player Wins!");
+    balance += bet*2;
   };
+  $("#balamt").html("$" + balance);
   resetGame();
 };
 
 function resetGame(){
+  console.log("reset")
   $("#dcards").empty();
   $("#pcards").empty();
   playerScore = "";
   dealerScore = "";
-  blackjack = "";
   $("#dealerscore").empty();
   $("#playerscore").empty();
-  playerCards = [];
-  dealerCards = [];
+  playerValues = [];
+  dealerValues = [];
   renewDeck();
-  $("#deal").on("click", startGame);
+  bet = $("#betbox").val();
+  if(balance < bet){
+    addBalance();
+  } else {
+    $("#deal").on("click", entryCheck);
+  };
 }
