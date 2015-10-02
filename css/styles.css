@@ -86,58 +86,19 @@ h3 {
   width: 927px;
 }
 
-#dealerscore, #playerscore {
+#dealerscore, #playerscore, #playerscoreB {
   font-size: 2.5em;
   margin-top: 0;
 }
 
 /*card element positions*/
 
-#dcards, #pcards {
+#dcards, #pcards{
   position: absolute;
   margin-left: 350px;
-  margin-top: 20px;
-}
-
-#dealertwo, #playertwo {
-  position: absolute;
-  margin-left: 80px;
-  margin-top: 10px;
-}
-
-#dealerthree, #playerthree {
-  position: absolute;
-  margin-left: 140px;
-  margin-top: 20px;
-}
-
-#dealerfour, #playerfour {
-  position: absolute;
-  margin-left: 190px;
-  margin-top: 30px;
-}
-
-#dealerfive, #playerfive {
-  position: absolute;
-  margin-left: 230px;
-  margin-top: 40px;
-}
-
-#dealersix, #playersix {
-  position: absolute;
-  margin-left: 270px;
   margin-top: 50px;
 }
 
-#dealerseven, #playerseven {
-  position: absolute;
-  margin-left: 310px;
-  margin-top: 50px;
-}
-
-.extracards {
-  visibility: hidden;
-}
 
 /*score boxes*/
 .score {
@@ -149,10 +110,34 @@ h3 {
   margin-left: 700px;
   margin-top: 30px;
   height: 170px;
-  width: 220px;
+  width: 200px;
   border: 5px solid #c04444;
   box-sizing: border-box;
 }
+
+
+/*player split positions*/
+
+.split-a {
+  margin-left: 0px;
+}
+
+.split-b {
+  margin-left: 725px;
+}
+
+#pcardsA {
+  position: absolute;
+  margin-left: 260px;
+  margin-top: 50px;
+}
+
+#pcardsB {
+  position: absolute;
+  margin-left: 540px;
+  margin-top: 50px;
+}
+
 
 /*buttons*/
 
@@ -171,6 +156,15 @@ h3 {
   margin: 15px;
 }
 
+.gamebuttons:focus{
+  outline: 0;
+}
+
+.buttons-off {
+  background: #666666;
+  color: #999;
+}
+
 /* CARD STYLES & SETUP */
 
 .card {
@@ -179,7 +173,9 @@ h3 {
   border-width: 1px;
   border-style: solid;
   font-size: 20pt;
-  position: absolute;
+  position: relative;
+  display: inline-block;
+  margin-left: -40px;
   width:  3.75em;
   height: 5.00em;
 }

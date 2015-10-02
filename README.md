@@ -41,7 +41,7 @@ The "stand" button triggers a function that executes the dealer's AI logic, repr
 The "double" button shows exactly one card for the player and thereafter mimics the "stand" button. It also doubles the amount of the bet and deducts the original amount from the account balance a second time.
 
 *Remaining Tasks*
-- Integrate getWinner function into game so a winner is automatically declared based on final player and dealer scores.
+- Integrate getWinner function into game so a winner is automatically declared based on final player and dealer scores. 
 - Make the value of an Ace flexible depending upon circumstances. This is partially implemented but still is not fully functional.
 - Add functionality for a "split" button.
 - Allow the player to play multiple games in succession, resetting the game board but keeping the money section intact.
