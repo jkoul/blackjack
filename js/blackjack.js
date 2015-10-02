@@ -1,5 +1,7 @@
 //combine cards into deck array
-var balance = 0;
+var balance = 1000;
+$("#balamt").html("$" + balance);
+var playerCards = []
 var playerValues = [];
 var dealerValues = [];
 var gamenum = 0;
@@ -10,8 +12,6 @@ $("#betbox").on("click", function() {
 
 
 $(document).ready(function () {
-  addBalance();
-  // getBet();
   renewDeck();
   setCardValues();
   $("#deal").on("click", entryCheck);
@@ -98,6 +98,7 @@ function addPlayerCard() {
   var node = nextCard.createNode();
   $("#pcards").append(node);
   playerValues.push(nextCard.value);
+  playerCards.push(nextCard);
   updatePlayerScore();
 }
 
@@ -175,6 +176,8 @@ function startGame(){
   };
   if (playerScore == 21) {
     blackjack();
+  } else if (dealerValues[1] == 11 && dealerValues[0] == 10) {
+      dealerPlay();
   } else {
     //hit functionality
     $("#hit").on("click", hitPlayer);
@@ -182,11 +185,15 @@ function startGame(){
     $("#double").on("click", doubleDown);
     //stand functionality
     $("#stand").on("click", dealerPlay);
-  }
+    if (playerCards[0].rank == playerCards[1].rank) {
+      //split
+      $("#split").on("click", splitHand);
+    };
+  };
 }
 
 var aceInsurance = function(insurance) {
-  var choice = confirm("Do you want to buy insurance?");
+  var choice = confirm("Dealer has a face-up Ace.\nDo you want to buy insurance?");
   if (choice == true) {
     insurance = bet*0.5;
     balance -= insurance;
@@ -222,7 +229,7 @@ function hitPlayer(){
   } else if (playerScore == 21) {
     dealerPlay();
   };
-};
+}
 
 function doubleDown() {
   balance -= bet;
@@ -272,11 +279,11 @@ function getWinner() {
     balance += bet*2;
   };
   $("#balamt").html("$" + balance);
-  resetGame();
+    resetGame();
 };
 
 function resetGame(){
-  console.log("reset")
+  console.log(gamenum)
   $("#dcards").empty();
   $("#pcards").empty();
   playerScore = "";
@@ -285,6 +292,7 @@ function resetGame(){
   $("#playerscore").empty();
   playerValues = [];
   dealerValues = [];
+  playerCards = [];
   renewDeck();
   bet = $("#betbox").val();
   if(balance < bet){

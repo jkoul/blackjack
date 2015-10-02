@@ -86,14 +86,14 @@ h3 {
   width: 927px;
 }
 
-#dealerscore, #playerscore {
+#dealerscore, #playerscore, #playerscoreB {
   font-size: 2.5em;
   margin-top: 0;
 }
 
 /*card element positions*/
 
-#dcards, #pcards {
+#dcards, #pcards{
   position: absolute;
   margin-left: 350px;
   margin-top: 50px;
@@ -110,10 +110,34 @@ h3 {
   margin-left: 700px;
   margin-top: 30px;
   height: 170px;
-  width: 220px;
+  width: 200px;
   border: 5px solid #c04444;
   box-sizing: border-box;
 }
+
+
+/*player split positions*/
+
+.split-a {
+  margin-left: 0px;
+}
+
+.split-b {
+  margin-left: 725px;
+}
+
+#pcardsA {
+  position: absolute;
+  margin-left: 260px;
+  margin-top: 50px;
+}
+
+#pcardsB {
+  position: absolute;
+  margin-left: 540px;
+  margin-top: 50px;
+}
+
 
 /*buttons*/
 
