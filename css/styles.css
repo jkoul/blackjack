@@ -156,7 +156,11 @@ h3 {
   margin: 15px;
 }
 
-#split {
+.gamebuttons:focus{
+  outline: 0;
+}
+
+.buttons-off {
   background: #666666;
   color: #999;
 }

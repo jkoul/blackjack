@@ -1,5 +1,5 @@
 function splitHand() {
-  $("#split").off("click");
+  $("#split").off("click").addClass("buttons-off");
   betA = bet;
   betB = bet;
   outcomeA = "";
@@ -35,14 +35,14 @@ function splitHand() {
     } else {
       alert("Play Your First Hand");
       //hit functionality
-      $("#hit").off("click");
-      $("#hit").on("click", hitPlayerA);
+      $("#hit").off("click").addClass("buttons-off");
+      $("#hit").on("click", hitPlayerA).removeClass("buttons-off");
       //double down
-      $("#double").off("click");
-      $("#double").on("click", doubleDownA);
+      $("#double").off("click").addClass("buttons-off");
+      $("#double").on("click", doubleDownA).removeClass("buttons-off");
       //stand functionality
-      $("#stand").off("click");
-      $("#stand").on("click", handB);
+      $("#stand").off("click").addClass("buttons-off");
+      $("#stand").on("click", handB).removeClass("buttons-off");
     };
   }
 }
@@ -109,7 +109,7 @@ function aceFlexSplitB() {
 
 
 function hitPlayerA(){
-  $("#double").off("click");
+  $("#double").off("click").addClass("buttons-off");
   if(playerScoreA < 21) {
     addSplitCardA();
   };
@@ -139,18 +139,18 @@ function handB() {
     };
   } else {
     alert("Play Your Second Hand");
-    $("#hit").off("click");
-    $("#hit").on("click", hitPlayerB);
-    $("#double").off("click");
-    $("#double").on("click", doubleDownB);
+    $("#hit").off("click").addClass("buttons-off");
+    $("#hit").on("click", hitPlayerB).removeClass("buttons-off");
+    $("#double").off("click").addClass("buttons-off");
+    $("#double").on("click", doubleDownB).removeClass("buttons-off");
     //stand functionality
-    $("#stand").off("click");
-    $("#stand").on("click", dealerPlaySplit);
+    $("#stand").off("click").addClass("buttons-off");
+    $("#stand").on("click", dealerPlaySplit).removeClass("buttons-off");
   };
 }
 
 function hitPlayerB(){
-  $("#double").off("click");
+  $("#double").off("click").addClass("buttons-off");
   if(playerScoreB < 21) {
     addSplitCardB();
   };
@@ -170,9 +170,9 @@ function doubleDownB() {
 }
 
 function dealerPlaySplit() {
-  $("#hit").off("click");
-  $("#stand").off("click");
-  $("#double").off("click");
+  $("#hit").off("click").addClass("buttons-off");
+  $("#stand").off("click").addClass("buttons-off");
+  $("#double").off("click").addClass("buttons-off");
   $("#dcards div:first-child.front").show();
   updateDealerScore();
   $("#dealerscore").html(dealerScore);
@@ -183,9 +183,9 @@ function dealerPlaySplit() {
 };
 
 function getSplitWinner() {
-  $("#hit").off("click");
-  $("#stand").off("click");
-  $("#double").off("click");
+  $("#hit").off("click").addClass("buttons-off");
+  $("#stand").off("click").addClass("buttons-off");
+  $("#double").off("click").addClass("buttons-off");
   if(outcomeA != "Blackjack") {
     if (playerScoreA > 21) {
       outcomeA = "Lose"

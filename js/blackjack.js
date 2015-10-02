@@ -14,7 +14,7 @@ $("#betbox").on("click", function() {
 $(document).ready(function () {
   renewDeck();
   setCardValues();
-  $("#deal").on("click", entryCheck);
+  $("#deal").on("click", entryCheck).removeClass("buttons-off");
 });
 
 function entryCheck() {
@@ -39,7 +39,7 @@ function addBalance() {
   $("#balamt").html("$" + balance).css("background","#ccc");
   if (gamenum > 0) {
     if (bet <= balance) {
-      $("#deal").on("click",entryCheck);
+      $("#deal").on("click",entryCheck).removeClass("buttons-off");
     } else {
       getBet();
     };
@@ -160,7 +160,7 @@ function startGame(){
   bet = $("#betbox").val();
   balance -= bet;
   $("#balamt").html("$" + balance);
-  $("#deal").off("click");
+  $("#deal").off("click").addClass("buttons-off");
   gamenum ++;
 
   //deal cards
@@ -180,14 +180,14 @@ function startGame(){
       dealerPlay();
   } else {
     //hit functionality
-    $("#hit").on("click", hitPlayer);
+    $("#hit").on("click", hitPlayer).removeClass("buttons-off");
     //double down
-    $("#double").on("click", doubleDown);
+    $("#double").on("click", doubleDown).removeClass("buttons-off");
     //stand functionality
-    $("#stand").on("click", dealerPlay);
+    $("#stand").on("click", dealerPlay).removeClass("buttons-off");
     if (playerCards[0].rank == playerCards[1].rank) {
       //split
-      $("#split").on("click", splitHand);
+      $("#split").on("click", splitHand).removeClass("buttons-off");
     };
   };
 }
@@ -220,7 +220,7 @@ function blackjack() {
 
 
 function hitPlayer(){
-  $("#double").off("click");
+  $("#double").off("click").addClass("buttons-off");
   if(playerScore < 21) {
     addPlayerCard();
   };
@@ -244,9 +244,9 @@ function doubleDown() {
 }
 
 function dealerPlay() {
-  $("#hit").off("click");
-  $("#stand").off("click");
-  $("#double").off("click");
+  $("#hit").off("click").addClass("buttons-off");
+  $("#stand").off("click").addClass("buttons-off");
+  $("#double").off("click").addClass("buttons-off");
   $("#dcards div:first-child.front").show();
   updateDealerScore();
   $("#dealerscore").html(dealerScore);
@@ -258,9 +258,9 @@ function dealerPlay() {
 
 
 function getWinner() {
-  $("#hit").off("click");
-  $("#stand").off("click");
-  $("#double").off("click");
+  $("#hit").off("click").addClass("buttons-off");
+  $("#stand").off("click").addClass("buttons-off");
+  $("#double").off("click").addClass("buttons-off");
   if (playerScore > 21) {
     alert("Player Bust! Dealer Wins!");
     balance += 0;
@@ -298,6 +298,6 @@ function resetGame(){
   if(balance < bet){
     addBalance();
   } else {
-    $("#deal").on("click", entryCheck);
+    $("#deal").on("click", entryCheck).removeClass("buttons-off");
   };
 }
